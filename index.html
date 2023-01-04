@@ -1,0 +1,591 @@
+<html>
+
+<head>
+    <title>Home</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="custom/css/style.css">
+
+    <link rel="stylesheet" href="libs/context-menu/ContextMenu.css" />
+
+    <script src="libs/context-menu/ContextMenu.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.23.0/cytoscape.min.js" integrity="sha512-gEWKnYYa1/1c3jOuT9PR7NxiVI1bwn02DeJGsl+lMVQ1fWMNvtjkjxIApTdbJ/wcDjQmbf+McWahXwipdC9bGA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cytoscape-grid-guide@2.3.3/cytoscape-grid-guide.js" integrity="sha256-Pc40chQsu4vagIebOPEE36h+Y4TvZObKhu/E2OddNkM=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  </head>
+
+<body>
+
+    <!-- UI -->
+    <!-- Top Menu -->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <ul class="navbar-nav">
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+            File
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">Save</a>
+            <a class="dropdown-item" href="#">Save locally</a>
+            <a class="dropdown-item" href="#">Load</a>
+            <a class="dropdown-item" href="#">Load locally</a>
+            <a class="dropdown-item" href="#" onclick="updateVersion(); return false;">Check for updates</a>
+          </div>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+            Edit
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#" onclick="focusAllNodes();">Select All</a>
+            <a class="dropdown-item" href="#" onclick="centerGraph();">Center graph in view</a>
+            <a class="dropdown-item" href="#" onclick="layoutGraph();">Layout nodes</a>
+          </div>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+            Help
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">Check documentation</a>
+            <a class="dropdown-item" href="#">Toggle help section</a>
+            <a class="dropdown-item" href="#">Report bug</a>
+          </div>
+        </li>
+
+      </ul>
+    </nav>
+
+    <!-- Top Options -->
+    <div class="top-options">
+      <div class="row">
+        <!-- Node Layout Options -->
+        <div class="col-4 top-options-menu">
+          <div class="w-100 contents node-layout-options">
+            <div class="layout-container">
+
+              <div class="layout">
+                <div class="layout-flex">
+                  <div>
+                    <img src="imgs/top-options/layout-icons/Breadthfirst.png" alt="">
+                    <p>Breadthfirst</p>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="layout">
+                <div class="layout-flex">
+                  <div>
+                    <img src="imgs/top-options/layout-icons/Breadthfirst.png" alt="">
+                    <p>Breadthfirst</p>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="layout">
+                <div class="layout-flex">
+                  <div>
+                    <img src="imgs/top-options/layout-icons/Breadthfirst.png" alt="">
+                    <p>Breadthfirst</p>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="layout">
+                <div class="layout-flex">
+                  <div>
+                    <img src="imgs/top-options/layout-icons/Breadthfirst.png" alt="">
+                    <p>Breadthfirst</p>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="layout">
+                <div class="layout-flex">
+                  <div>
+                    <img src="imgs/top-options/layout-icons/Breadthfirst.png" alt="">
+                    <p>Breadthfirst</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Grid Layout Options -->
+        <div class="col-4 top-options-menu grid-options">
+          <div class="w-100 contents">
+            <div class="row h-100">
+              <div class="col-4 h-100 border-right px-4">
+
+                <div class="form-check border-bottom py-3">
+                  <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" onchange="change_grid_config()" id="show-grid" value="">Show grid
+                  </label>
+                </div>
+
+                <div class="form-check py-3">
+                  <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" onchange="change_grid_config()" id="snap-grid" value="">Snap to grid
+                  </label>
+                </div>
+
+              </div>
+
+              <div class="col-4 h-100 border-right px-4">
+
+                <div class="form-check border-bottom py-3">
+                  <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" onchange="change_grid_config()" id="interactive-grid" value="">Interactive grid
+                  </label>
+                </div>
+
+                
+                <div class="form-group py-2 m-0">
+                  <label for="grid-color-picker">Grid Color:</label>
+                  <div id="grid-color-picker"></div>
+                </div>
+
+              </div>
+
+              <div class="col-4 h-100 px-4">
+
+                <div class="form-group border-bottom py-2 m-0">
+                  <label for="grid-spacing">Grid spacing:</label>
+                  <div class="slidecontainer">
+                    <input type="range" min="30" max="170" value="50" onchange="change_grid_config()" class="slider w-100" id="grid-spacing">
+                  </div>
+                </div>
+
+                <div class="form-group py-2 m-0">
+                  <label for="grid-spacing">Grid line width:</label>
+                  <div class="slidecontainer">
+                    <input type="range" min="1.0" step="0.5" max="6.0" value="1.0" onchange="change_grid_config()" class="slider w-100" id="grid-line-width">
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Help Commands -->
+        <div class="col-2 top-options-menu">
+          <div class="w-100 contents">
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Options -->
+    <div class="bottom-options">
+      <div class="logs">
+        <p class="text-light">Loremp Ipsum...</p>
+        <p class="text-success">Lorem Ipsum...</p>
+        <p class="text-danger">Lorem Ipsum...</p>
+        <p class="text-warning">Lorem Ipsum...</p>
+        
+        <p class="text-light">Loremp Ipsum...</p>
+        <p class="text-success">Lorem Ipsum...</p>
+        <p class="text-danger">Lorem Ipsum...</p>
+        <p class="text-warning">Lorem Ipsum...</p>
+
+        <p class="text-light">Loremp Ipsum...</p>
+        <p class="text-success">Lorem Ipsum...</p>
+        <p class="text-danger">Lorem Ipsum...</p>
+        <p class="text-warning">Lorem Ipsum...</p>
+
+      </div>
+    </div>
+
+    <!-- Left Options -->
+    <div class="left-options">
+      <!-- Node Create Section -->
+      <div class="section node-create">
+        <div class="contents">
+
+          <div class="create-node-button w-100 text-light border">
+            <p><span class="bullet">&#9642;</span> <span class="text">Create Node</span></p>
+          </div>
+
+          <div class="create-node-button w-100 text-light border">
+            <p><span class="bullet">&#9642;</span> <span class="text">Create Node</span></p>
+          </div>
+
+          <div class="create-node-button w-100 text-light border">
+            <p><span class="bullet">&#9642;</span> <span class="text">Create Node</span></p>
+          </div>
+
+          <div class="create-node-button w-100 text-light border">
+            <p><span class="bullet">&#9642;</span> <span class="text">Create Node</span></p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Node Transforms Section -->
+      <div class="section node-transforms">
+        <div class="contents" id="transforms-contents">
+
+          <div class="panel-group transform">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" href="#collapse1">&#8982; Transform Name</a>
+                  <span class="float-right transform-but text-success">&#9658;</span>
+                </h4>
+              </div>
+              <div id="collapse1" class="panel-collapse collapse border-top">
+                <div class="panel-body">Transform Description</div>
+              </div>
+            </div>
+          </div> 
+
+          <div class="panel-group transform">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" href="#collapse1">&#8982; Transform Name</a>
+                  <span class="float-right transform-but text-success">&#9658;</span>
+                </h4>
+              </div>
+              <div id="collapse1" class="panel-collapse collapse border-top">
+                <div class="panel-body">Transform Description</div>
+              </div>
+            </div>
+          </div> 
+
+          <div class="panel-group transform">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" href="#collapse1">&#8982; Transform Name</a>
+                  <span class="float-right transform-but text-success">&#9658;</span>
+                </h4>
+              </div>
+              <div id="collapse1" class="panel-collapse collapse border-top">
+                <div class="panel-body">Transform Description</div>
+              </div>
+            </div>
+          </div> 
+
+          <div class="panel-group transform">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" href="#collapse1">&#8982; Transform Name</a>
+                  <span class="float-right transform-but text-success">&#9658;</span>
+                </h4>
+              </div>
+              <div id="collapse1" class="panel-collapse collapse border-top">
+                <div class="panel-body">Transform Description</div>
+              </div>
+            </div>
+          </div> 
+
+          <div class="panel-group transform">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" href="#collapse1">&#8982; Transform Name</a>
+                  <span class="float-right transform-but text-success">&#9658;</span>
+                </h4>
+              </div>
+              <div id="collapse1" class="panel-collapse collapse border-top">
+                <div class="panel-body">Transform Description</div>
+              </div>
+            </div>
+          </div> 
+
+        </div>
+      </div>
+
+      <!-- Node Filters Section -->
+      <div class="section node-filters">
+
+      </div>
+    </div>
+
+    <!-- Right Options -->
+    <div class="right-options">
+      <!-- Node Create Section -->
+      <div class="section result-options">
+
+        <div class="row">
+          <div class="col-12 pt-3 text-center">
+            <p class="text-light">Max. results/transform</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-12">
+
+            <div class="w-100 px-3">
+              <div class="row">
+                <div class="col-6">
+                  <label for="search-number" class="float-left text-light border-left mb-0 pl-2">100</label>
+                </div>
+
+                <div class="col-6 pl-2 border-left">
+                  <label for="search-number" class="float-left text-light mb-0">12k</label>
+                  <label for="search-number" class="float-right text-light mb-0 border-right mb-0 pr-2">16k</label>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12 mt-2">
+                  <input type="range" class="w-100" min="100" max="16000" value="100" step="3975" id="search-number-limit" onchange="setResultsLimit();">
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <div class="row border-top py-2">
+          <div class="col-6 pr-1">
+            <button class="btn btn-primary w-100" onclick="copy_clipboard_nodes();">
+              <i class="fa-regular fa-clipboard"></i> Copy selected
+            </button>
+          </div>
+
+          <div class="col-6 pl-1">
+            <button class="btn btn-primary w-100" onclick="paste_clipboard_nodes();">
+              <i class="fa-solid fa-paste"></i> Paste nodes
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="section focused-nodes">
+        <div class="contents" id="focused-nodes-contents">
+
+          <button class="node w-100 text-light border">
+            <p><span class="bullet">&#9642;</span>
+              <span class="text">Node</span>
+              <br/>
+              <span class="text text-muted small ml-3">
+                Node Type
+              </span>
+            </p>
+          </button>
+
+          <button class="node w-100 text-light border">
+            <p><span class="bullet">&#9642;</span>
+              <span class="text">Node</span>
+              <br/>
+              <span class="text text-muted small ml-3">
+                Node Type
+              </span>
+            </p>
+          </button>
+
+          <button class="node w-100 text-light border">
+            <p><span class="bullet">&#9642;</span>
+              <span class="text">Node</span>
+              <br/>
+              <span class="text text-muted small ml-3">
+                Node Type
+              </span>
+            </p>
+          </button>
+          
+          <button class="node w-100 text-light border">
+            <p><span class="bullet">&#9642;</span>
+              <span class="text">Node</span>
+              <br/>
+              <span class="text text-muted small ml-3">
+                Node Type
+              </span>
+            </p>
+          </button>
+
+          <button class="node w-100 text-light border">
+            <p><span class="bullet">&#9642;</span>
+              <span class="text">Node</span>
+              <br/>
+              <span class="text text-muted small ml-3">
+                Node Type
+              </span>
+            </p>
+          </button>
+
+          <button class="node w-100 text-light border">
+            <p><span class="bullet">&#9642;</span>
+              <span class="text">Node</span>
+              <br/>
+              <span class="text text-muted small ml-3">
+                Node Type
+              </span>
+            </p>
+          </button>
+
+        </div>
+      </div>
+
+      <div class="section focused-nodes-properties">
+        <div class="contents" id="focused-node-properties">
+
+          <div class="row node-property">
+            <div class="col-6">
+              <p class="text-muted">Name</p>
+            </div>
+            <div class="col-6">
+              <p class="text-muted">Value</p>
+            </div>
+          </div>
+
+          <div class="row node-property">
+            <div class="col-6">
+              <p class="text-muted">Name</p>
+            </div>
+            <div class="col-6">
+              <p class="text-muted">Value</p>
+            </div>
+          </div>
+
+          <div class="row node-property">
+            <div class="col-6">
+              <p class="text-muted">Name</p>
+            </div>
+            <div class="col-6">
+              <p class="text-muted">Value</p>
+            </div>
+          </div>
+          
+          <div class="row node-property">
+            <div class="col-6">
+              <p class="text-muted">Name</p>
+            </div>
+            <div class="col-6">
+              <p class="text-muted">Value</p>
+            </div>
+          </div>
+
+          <div class="row node-property">
+            <div class="col-6">
+              <p class="text-muted">Name</p>
+            </div>
+            <div class="col-6">
+              <p class="text-muted">Value</p>
+            </div>
+          </div>
+
+          <div class="row node-property">
+            <div class="col-6">
+              <p class="text-muted">Name</p>
+            </div>
+            <div class="col-6">
+              <p class="text-muted">Value</p>
+            </div>
+          </div>
+
+          <div class="row node-property">
+            <div class="col-6">
+              <p class="text-muted">Name</p>
+            </div>
+            <div class="col-6">
+              <p class="text-muted">Value</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <div id="graph-container"></div>
+
+    <!-- View Modal -->
+    <div class="modal" id="view-modal">
+      <div class="modal-dialog bg-dark">
+        <div class="modal-content bg-dark">
+          <div class="modal-header text-light">
+            <h4 class="modal-title">Node title: <span id="node-title"></span></h4>
+            <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body px-5">
+            <div class="row">
+              <div class="col-12 border bg-fade py-2 mt-3" id="node-details"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Create Node Modal -->
+    <div class="modal" id="create-node-modal">
+      <div class="modal-dialog bg-dark">
+        <div class="modal-content bg-dark">
+          <div class="modal-header text-light">
+            <h4 class="modal-title">Create <span id="create-node-modal-type"></span></h4>
+            <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <input type="hidden" id="create-node-type">
+              <div class="form-group col-12 col-md-8">
+                <input type="text" class="form-control" id="create-node-input" placeholder="Node value">
+              </div>
+              <div class="col-12 col-md-4">
+                <button type="button" onclick="add_node();" class="btn btn-primary w-100">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+
+  <script type="text/javascript">
+    var allNodes = [];
+    var focusedNodes = [];
+    var selectedNode = null;
+    var myMenu = null;
+    var menuItems = null;
+    var nodeMenus = {
+    };
+    var allNodeTransforms = [];
+
+    var resultLimit = 100;
+
+    var clipboardNodes = [];
+  </script>
+
+  <script src="custom/js/utils.js"></script>
+  <script src="custom/js/node.js"></script>
+  <script src="custom/js/context-menus.js"></script>
+  
+  <script src="custom/js/node-properties.js"></script>
+
+  <script src="custom/js/graph-options.js"></script>
+  <script src="custom/js/graph-helper.js"></script>
+  <script src="custom/js/graph.js"></script>
+
+  <script src="custom/js/keyboard-control.js"></script>
+
+  <script src="custom/js/top-options.js"></script>
+  <script src="custom/js/logs.js"></script>
+
+</html>
