@@ -241,7 +241,7 @@ function checkFocused(){
       </div>
       `);
 
-      $('#' + allNodeTransforms[nodeType][i].name + '-menu-transform .transform-but').click(function(){
+      $('#' + allNodeTransforms[nodeType][i].name + '-menu-transform-full .transform-but').click(function(){
         for(let j = 0; j < focusedNodes.length; j++){
           executeTransform(allNodeTransforms[nodeType][i].command, allNodeTransforms[nodeType][i], focusedNodes[j]);
         }
