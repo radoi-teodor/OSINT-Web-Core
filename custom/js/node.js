@@ -31,6 +31,10 @@ var NodeType = {
     name:'Article',
     color:'#b85d17',
   },
+  Information: {
+    name:'Information',
+    color:'#9a17b8',
+  },
 }
 
 class Node {

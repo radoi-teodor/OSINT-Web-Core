@@ -9,6 +9,8 @@ use Tectalic\OpenAi\Client;
 use Tectalic\OpenAi\Manager;
 use Tectalic\OpenAi\Models\Completions\CreateRequest;
 
+header("Content-Type: application/json");
+
 $env_data = parseEnvFile('.env');
 $openai_api_key = getEnvVar($env_data, 'OPENAI_API_KEY', '');
 
@@ -22,18 +24,56 @@ $auth = new Authentication($openai_api_key);
 $httpClient = new Psr18Client();
 $client = new Client($httpClient, $auth, Manager::BASE_URI);
 
-header("Content-Type: application/json");
 
 // Check if the request method is POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try{
-        // Get the "query" parameter from the POST request
-        $prompt = $_POST['query'];
+    $instructions = strval($_POST['instructions']);
+    $nodes = json_decode($_POST['nodes']);
+    $prompts = [];
+    for($i = 0; $i < count($nodes); $i++){
+        $raw_data = trim(parseNodeData($nodes[$i]));
+        $raw_data = cutSentencesToFitWordLimit($raw_data, 1000);
+        $data = $instructions.' "'.$raw_data.'"';
+        array_push($prompts, $data);
+    }
 
+    $data = '';
+    for($i = 0; $i < count($prompts); $i++){
+        $result = getCompletionText($prompts[$i]);
+
+        if($result['result']!='Error'){
+            $data.=$result['result'].'<br/>';
+        }
+    }
+
+    echo json_encode([
+        'result'=>$data
+    ]);
+}
+
+function parseNodeData($node){
+    $result = '';
+
+    switch($node->type->name){
+        case 'Article':
+            $result = extractUrlContent($node->details);
+            break;
+        default:
+            $result = replaceLinksWithContent($node->details);
+            break;
+    }
+    return $result;
+}
+
+function getCompletionText($prompt) {
+    try{
+        global $client;
+        // Send the completion request
         $response = $client->completions()->create(
             new CreateRequest([
                 'model'  => 'text-curie-001',
                 'prompt' => $prompt,
+                'max_tokens' => 2047-count_tokens($prompt),
             ])
         )->toModel();
         
@@ -42,11 +82,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'result'=>$response->choices[0]->text
         ];
 
-        // Return the completion text as the response body
-        echo json_encode($completion);
-    }catch(Exception $e) {
-        echo json_encode([
+        return $completion;
+    } catch(Exception $e) {
+        return [
             'result'=>'Error'
-        ]);
+        ];
     }
 }

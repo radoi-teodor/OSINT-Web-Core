@@ -103,7 +103,17 @@ function getEnvVar($envVars, $key, $default = null) {
 
 function extractUrlContent($url) {
     // Retrieve the HTML source code of the page
-    $html = file_get_contents($url);
+    $url = preg_replace('/\s+/', '', $url);
+
+    $options = array(
+        'http' => array(
+          'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+        )
+      );
+      
+    $context = stream_context_create($options);
+
+    $html = file_get_contents($url, false, $context);
 
     // Parse the HTML source code
     $dom = new DOMDocument();
@@ -154,7 +164,7 @@ function extractUrlContent($url) {
 
     // Return the extracted content
     return $articleContent;
-}
+} 
 
 function replaceLinksWithContent($text) {
     // Initialize a counter to keep track of the number of links replaced
@@ -179,4 +189,48 @@ function replaceLinksWithContent($text) {
 
     // Return the modified text
     return $text;
+}
+
+
+function cutSentencesToFitWordLimit(string $text, int $wordLimit) {
+    // Split the text into an array of words
+    $words = explode(" ", $text);
+  
+    // Initialize a variable to keep track of the current word count
+    $currentWordCount = 0;
+  
+    // Initialize a variable to store the result
+    $result = "";
+  
+    // Iterate through the words
+    foreach ($words as $word) {
+      // If adding the current word to the result would exceed the word limit, stop the loop
+      if ($currentWordCount + str_word_count($word) > $wordLimit) {
+        break;
+      }
+  
+      // Add the current word to the result
+      $result .= $word . " ";
+  
+      // Increment the current word count
+      $currentWordCount += str_word_count($word);
+    }
+  
+    // Return the result
+    return $result;
+} 
+
+function count_tokens($string) {
+    // Remove all punctuation from the string
+    $string = preg_replace("/[^a-zA-Z0-9\s]/", "", $string);
+    // Split the string into an array of words
+    $words = explode(" ", $string);
+    // Initialize a token count variable
+    $token_count = 0;
+    // Loop through each word and add the number of tokens it contains to the total
+    foreach ($words as $word) {
+        $token_count += ceil(strlen($word) / 4);
+    }
+    // Return the total number of tokens
+    return intval($token_count);
 }
