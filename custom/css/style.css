@@ -291,7 +291,7 @@ html, body{
   border-color: #414951 !important;
 }
 
-.left-options .node-ai textarea{
+.left-options .node-ai #ai-textarea{
   resize: none;
   height: 75%;
   color: white;
@@ -299,7 +299,7 @@ html, body{
   background: #3f474f;
 }
 
-.left-options .node-ai .request-but{
+.left-options .node-ai #request-ai-but{
   border: solid;
   border-color: #4b5761 !important;
   background: #3f474f;

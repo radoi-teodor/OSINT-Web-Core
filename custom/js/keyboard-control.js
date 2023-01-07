@@ -10,7 +10,7 @@ function layoutGraph(){
 }
 
 $(document).keydown(function(e) {
-    if($('.modal-backdrop.show').length > 0){
+    if($('.modal-backdrop.show').length > 0 || $('#ai-textarea').is(":focus")){
         return true;
     }
     switch(e.which){
