@@ -5,7 +5,7 @@ class CompaniesArticles extends ModuleBase{
     protected $command = 'companies-articles';
     protected $description = 'Collect articles for companies';
     protected $allowed = ['Company'];
-    
+
     protected function parseOutput($output){
         $middle = $output;
         $result = [];
