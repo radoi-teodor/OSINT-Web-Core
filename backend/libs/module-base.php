@@ -46,10 +46,16 @@ abstract class ModuleBase{
         }
         $command = "recon-cli -m $this->command $stringArgs -x";
         $command .= " 2>&1";
+        
+        $encoding = mb_detect_encoding($command, "UTF-8, ISO-8859-1, ISO-8859-15, Windows-1252, ASCII");
+        $command = mb_convert_encoding($command, 'UTF-8', $encoding);
+        
+        putenv('LC_ALL=en_US.UTF-8');
+        
         $output = '';
         $returnStatus = '';
         exec($command, $output, $returnStatus);
-        
+
         return $this->parseOutput($output);
     }
 }
