@@ -177,85 +177,89 @@ function paste_clipboard_nodes(){
 
 
 function checkFocused(){
-  let sameTypeNodes = true;
-  let nodeType = null;
+  var workerFunction = function(){
+    let sameTypeNodes = true;
+    let nodeType = null;
 
-  showSelectedNodeProperties();
+    showSelectedNodeProperties();
 
-  $('#transforms-contents').empty();
+    $('#transforms-contents').empty();
 
-  $('#focused-nodes-contents').empty();
+    $('#focused-nodes-contents').empty();
 
-  if(focusedNodes.length <= 0){
-    $('#focused-nodes-contents').html(`
-      <p class="text-light">No node selected</p>
-    `);
-  }
-
-  for(let i = 0; i< focusedNodes.length; i++){
-    if(nodeType != null && nodeType != focusedNodes[i].type.name){
-      sameTypeNodes = false;
-    }else{
-      nodeType = focusedNodes[i].type.name;
+    if(focusedNodes.length <= 0){
+      $('#focused-nodes-contents').html(`
+        <p class="text-light">No node selected</p>
+      `);
     }
 
-    $('#focused-nodes-contents').append(`
-    <button data-node="${focusedNodes[i].title}" class="node w-100 text-light border" id="focused-node-${focusedNodes[i].title}">
-      <p>
-        <span class="bullet" style="color: ${focusedNodes[i].type.color};">&#9642;</span>
-          <span class="text">
-            ${focusedNodes[i].title}
-          </span>
-          <br/>
-          <span class="text text-muted small ml-3">
-            ${focusedNodes[i].type.name}
-          </span>
-      </p>
-    </button>
-    `);
+    for(let i = 0; i< focusedNodes.length; i++){
+      if(nodeType != null && nodeType != focusedNodes[i].type.name){
+        sameTypeNodes = false;
+      }else{
+        nodeType = focusedNodes[i].type.name;
+      }
 
-    $('button[id="focused-node-' + focusedNodes[i].title + '"]').focus(function(e){
-      showSelectedNodeProperties(focusedNodes[i]);
-    });
-
-    $('button[id="focused-node-' + focusedNodes[i].title + '"]').bind('blur', function(e){
-      showSelectedNodeProperties();
-    });
-  }
-
-  if(focusedNodes.length > 0 && sameTypeNodes){
-    for(let i = 0; i < allNodeTransforms[nodeType].length; i++){
-      $('#transforms-contents').append(`
-      <div class="panel-group transform" id="${allNodeTransforms[nodeType][i].name}-menu-transform-full">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">
-              <a data-toggle="collapse" href="#${allNodeTransforms[nodeType][i].name}-menu-transform">&#8982; ${allNodeTransforms[nodeType][i].name}</a>
-              <span class="float-right transform-but text-success">&#9658;</span>
-            </h4>
-          </div>
-          <div id="${allNodeTransforms[nodeType][i].name}-menu-transform" class="panel-collapse collapse border-top">
-            <div class="panel-body">${allNodeTransforms[nodeType][i].description}</div>
-          </div>
-        </div>
-      </div>
+      $('#focused-nodes-contents').append(`
+      <button data-node="${focusedNodes[i].title}" class="node w-100 text-light border" id="focused-node-${focusedNodes[i].title}">
+        <p>
+          <span class="bullet" style="color: ${focusedNodes[i].type.color};">&#9642;</span>
+            <span class="text">
+              ${focusedNodes[i].title}
+            </span>
+            <br/>
+            <span class="text text-muted small ml-3">
+              ${focusedNodes[i].type.name}
+            </span>
+        </p>
+      </button>
       `);
 
-      $('#' + allNodeTransforms[nodeType][i].name + '-menu-transform-full .transform-but').click(function(){
-        for(let j = 0; j < focusedNodes.length; j++){
-          executeTransform(allNodeTransforms[nodeType][i].command, allNodeTransforms[nodeType][i], focusedNodes[j]);
-        }
-
-        checkFocused();
+      $('button[id="focused-node-' + focusedNodes[i].title + '"]').focus(function(e){
+        showSelectedNodeProperties(focusedNodes[i]);
       });
-    }
-  }else{
-    if(focusedNodes.length > 1 && !sameTypeNodes){
-      $('#transforms-contents').html('<p class="text-light">Selected nodes are different types. Cannot be transformed at once.</p>')
+
+      $('button[id="focused-node-' + focusedNodes[i].title + '"]').bind('blur', function(e){
+        showSelectedNodeProperties();
+      });
+    } 
+
+    if(focusedNodes.length > 0 && sameTypeNodes){
+      for(let i = 0; i < allNodeTransforms[nodeType].length; i++){
+        $('#transforms-contents').append(`
+        <div class="panel-group transform" id="${allNodeTransforms[nodeType][i].name}-menu-transform-full">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#${allNodeTransforms[nodeType][i].name}-menu-transform">&#8982; ${allNodeTransforms[nodeType][i].name}</a>
+                <span class="float-right transform-but text-success">&#9658;</span>
+              </h4>
+            </div>
+            <div id="${allNodeTransforms[nodeType][i].name}-menu-transform" class="panel-collapse collapse border-top">
+              <div class="panel-body">${allNodeTransforms[nodeType][i].description}</div>
+            </div>
+          </div>
+        </div>
+        `);
+
+        $('#' + allNodeTransforms[nodeType][i].name + '-menu-transform-full .transform-but').click(function(){
+          for(let j = 0; j < focusedNodes.length; j++){
+            executeTransform(allNodeTransforms[nodeType][i].command, allNodeTransforms[nodeType][i], focusedNodes[j]);
+          }
+
+          checkFocused();
+        });
+      }
     }else{
-      $('#transforms-contents').html('<p class="text-light">No node selected.</p>')
+      if(focusedNodes.length > 1 && !sameTypeNodes){
+        $('#transforms-contents').html('<p class="text-light">Selected nodes are different types. Cannot be transformed at once.</p>')
+      }else{
+        $('#transforms-contents').html('<p class="text-light">No node selected.</p>')
+      }
     }
   }
+
+  setTimeout(workerFunction, 0);
 }
 
 // Data parser
